@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { Link } from "react-router-dom";
 
 function LoginScreen() {
     return (
@@ -21,6 +22,9 @@ function LoginScreen() {
                     <Button variant="contained" color="primary">
                         Zaloguj się
                     </Button>
+                </Grid>
+                <Grid item xs={12} className="centered_grid">
+                    <div>Jeeli nie masz konta, <Link to="/register"> zarejetruj się. </Link></div>
                 </Grid>
             </Grid>
         </Paper>
