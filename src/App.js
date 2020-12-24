@@ -18,7 +18,7 @@ import {
 import NotFoundScreen from './screens/not_found/NotFoundScreen';
 
 function App() {
-
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChange();
     return () => {

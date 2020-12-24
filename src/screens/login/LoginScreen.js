@@ -9,6 +9,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { generalStyles } from '../../styles/mui/generalStyles';
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import 'firebase/auth';
 import firebaseApp from '../../firebaseConfig';
@@ -18,6 +19,7 @@ function LoginScreen() {
     const { handleSubmit, control, errors: fieldsErrors, reset } = useForm();
     const [isInProgress, setProgressVisibility] = useState(false);
     const [loginError, setLoginError] = useState("");
+    const history = useHistory(); 
 
     const classes = generalStyles();
 
@@ -28,7 +30,7 @@ function LoginScreen() {
         setProgressVisibility(true);
         try {
             const result = await auth.signInWithEmailAndPassword(data.email, data.password);
-            console.log(result);
+            history.replace('/');
         } catch (error) {
             setLoginError(error.message);
         } finally {
