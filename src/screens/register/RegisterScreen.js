@@ -17,7 +17,6 @@ import firebaseApp from '../../firebaseConfig';
 function RegisterScreen() {
 
     const [isInProgress, setProgressVisibility] = useState(false);
-    const [isRegisterSuccess, setRegisterSuccess] = useState(false);
     const [registerError, setRegisterError] = useState("");
     const { handleSubmit, control, errors: fieldsErrors, reset } = useForm();
     const history = useHistory(); 
