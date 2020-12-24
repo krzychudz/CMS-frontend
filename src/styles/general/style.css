@@ -28,3 +28,13 @@ body {
 .centered_grid {
     text-align: center;
 }
+
+.general_error {
+    font-size: 12px;
+    padding: 8px;
+    color: red;
+}
+
+.link {
+    color: #BB86FC;
+  }

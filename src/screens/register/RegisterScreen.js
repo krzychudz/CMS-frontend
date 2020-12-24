@@ -8,6 +8,8 @@ import FormControl from '@material-ui/core/FormControl';
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { generalStyles } from '../../styles/mui/generalStyles';
+import { getRegisterError } from '../../helpers/firebase/firebaseErrorsHelper';
+import { useHistory } from "react-router-dom";
 
 import 'firebase/auth';
 import firebaseApp from '../../firebaseConfig';
@@ -15,7 +17,10 @@ import firebaseApp from '../../firebaseConfig';
 function RegisterScreen() {
 
     const [isInProgress, setProgressVisibility] = useState(false);
+    const [isRegisterSuccess, setRegisterSuccess] = useState(false);
+    const [registerError, setRegisterError] = useState("");
     const { handleSubmit, control, errors: fieldsErrors, reset } = useForm();
+    const history = useHistory(); 
 
     const auth = firebaseApp.auth();
     const classes = generalStyles();
@@ -25,12 +30,12 @@ function RegisterScreen() {
         try {
             setProgressVisibility(true);
             var registeredUser = await auth.createUserWithEmailAndPassword(data.email, data.password);
-            console.log(registeredUser);
+            history.goBack();
+            reset();
         } catch (error) {
-            console.log(error);
+            setRegisterError(getRegisterError(error.code));
         }
         setProgressVisibility(false);
-        reset();
     }
 
     return (
@@ -132,6 +137,10 @@ function RegisterScreen() {
 
                     <Grid item xs={12} className={classes.centerChildren}>
                         {isInProgress && <CircularProgress />}
+                    </Grid>
+
+                    <Grid item xs={12} className={classes.centerChildren}>
+                            {registerError !== "" && <div className={"general_error"}>{registerError}</div>}
                     </Grid>
 
                     <Grid item xs={12} className={`${classes.centerChildren} ${classes.margin}`}>
