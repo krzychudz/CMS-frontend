@@ -7,7 +7,7 @@ const mainTheme = createMuiTheme({
             main: '#BB86FC',
         },
         secondary: {
-            main: green[500],
+            main: '#232323',
         },
     },
     overrides: {
