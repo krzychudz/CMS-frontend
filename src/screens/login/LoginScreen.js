@@ -24,7 +24,7 @@ function LoginScreen() {
                     </Button>
                 </Grid>
                 <Grid item xs={12} className="centered_grid">
-                    <div>Jeeli nie masz konta, <Link to="/register"> zarejetruj się. </Link></div>
+                    <div>Jeśli nie masz konta, <Link to="/register"> zarejetruj się. </Link></div>
                 </Grid>
             </Grid>
         </Paper>

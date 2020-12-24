@@ -3,11 +3,12 @@
 body {
     background-color: var(--light-primary-color);
     font-family: 'Roboto', sans-serif;
+    color: white;
 }
 
 .main_container {
-    background-color: var(--dark-primary-color);
-    box-shadow:0 0 15px 4px rgba(0,0,0,0.4);
+    background-color: var(--primary-color);
+    box-shadow:0 0 15px 4px rgba(0,0,0,0.2);
     width: 60%;
     position: fixed;
     top: 50%;
