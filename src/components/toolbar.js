@@ -56,7 +56,6 @@ const MainAppBar = withRouter(({ history }) => {
 
     useEffect(() => {
         const unsubscribe = history.listen((location, action) => {
-            console.log(location.pathname);
             setLoginButtonVisibility(location.pathname !== '/login' && location.pathname !== '/register')
         });
         return () => {

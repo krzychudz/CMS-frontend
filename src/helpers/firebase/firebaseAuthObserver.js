@@ -1,5 +1,6 @@
 import 'firebase/auth';
 import firebaseApp from '../../firebaseConfig';
+import axios from "axios";
 
 const auth = firebaseApp.auth();
 
@@ -7,10 +8,12 @@ export function onAuthStateChange() {
     return auth.onAuthStateChanged(user => {
       if (user) {
         auth.currentUser.getIdToken().then(idToken => {
-            console.log(idToken);
+          axios.defaults.headers.common['Authorization'] = idToken;
+          localStorage.setItem('userId', user.uid);
         }).catch();
       } else {
-        console.log("The user is not logged in");
+          delete axios.defaults.headers.common['Authorization'];
+          localStorage.removeItem('userId');
       }
     });
 }
