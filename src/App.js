@@ -1,7 +1,7 @@
 import LoginScreen from './screens/login/LoginScreen';
 import RegisterScreen from './screens/register/RegisterScreen';
 import HomeScreen from './screens/home/HomeScreen';
-import ProducstManagement from './screens/products_management/productsManagement';
+import ProducstManagement from './screens/products_management/ProductsManagement';
 import MainAppBar from './components/toolbar';
 import mainTheme from './muiTheme';
 

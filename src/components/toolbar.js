@@ -81,7 +81,7 @@ const MainAppBar = withRouter(({ history }) => {
 
     return (
 
-        <AppBar position="static" color="secondary">
+        <AppBar position="sticky" color="secondary">
             <Toolbar>
                 <Button color="inherit" onClick={() => history.replace('/')} >Home</Button>
 
