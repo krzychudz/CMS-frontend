@@ -40,10 +40,11 @@ const MainAppBar = withRouter(({ history }) => {
     }
 
     const handleProfileClick = () => {
+        history.replace('/products_management')
         setAnchorEl(null);
     };
 
-    const handleLogout = async () => {     
+    const handleLogout = async () => {
         try {
             await auth.signOut();
             setAnchorEl(null);
