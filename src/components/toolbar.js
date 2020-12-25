@@ -3,10 +3,17 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
+
+import 'firebase/auth';
+import firebaseApp from '../firebaseConfig';
+
+const auth = firebaseApp.auth();
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -20,6 +27,31 @@ const MainAppBar = withRouter(({ history }) => {
 
     const classes = useStyles();
     const [shouldDisplayLoginButton, setLoginButtonVisibility] = useState(true);
+    const [isUserLoggedIn, setUserLoggedIn] = useState(false)
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    }
+
+    const handleProfileClick = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogout = async () => {     
+        try {
+            await auth.signOut();
+            setAnchorEl(null);
+            history.replace('/');
+        } catch (error) {
+            alert("Coś poszło nie tak, spróbuj ponowanie!");
+        }
+    }
 
     useEffect(() => {
         const unsubscribe = history.listen((location, action) => {
@@ -31,6 +63,19 @@ const MainAppBar = withRouter(({ history }) => {
         };
     }, []);
 
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (user) {
+                setUserLoggedIn(true);
+            } else {
+                setUserLoggedIn(false);
+            }
+        });
+        return () => {
+            unsubscribe();
+        }
+    });
+
 
 
     return (
@@ -41,14 +86,33 @@ const MainAppBar = withRouter(({ history }) => {
 
                 <Box className={classes.title}> </Box>
                 {shouldDisplayLoginButton ?
-                    false
-                        ? <IconButton
+                    isUserLoggedIn
+                        ? [<IconButton
                             aria-label="account of current user"
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
-                            color="inherit">
+                            color="inherit"
+                            onClick={handleMenu}>
                             <AccountCircle />
-                        </IconButton>
+                        </IconButton>,
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={open}
+                            onClose={handleMenuClose}>
+                            <MenuItem onClick={handleProfileClick}>Moje konto</MenuItem>
+                            <MenuItem onClick={handleLogout}>Wyloguj</MenuItem>
+                        </Menu>
+                        ]
                         : <Button color="inherit" onClick={() => history.push('/login')} >Zaloguj się</Button>
                     : null
                 }
