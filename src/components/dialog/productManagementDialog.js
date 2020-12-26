@@ -22,6 +22,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { forwardRef, useState } from 'react';
 import { generalStyles } from '../../styles/mui/generalStyles';
 
+import { addProduct } from '../../backend/productsRepository';
+
 import 'firebase/storage';
 import firebaseApp from '../../firebaseConfig';
 
@@ -68,9 +70,24 @@ function ProductManagementDialog(props) {
     const { handleSubmit, control, errors: fieldsErrors, reset } = useForm();
     const [isPublished, setIsPublished] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
+    const [isInProgress, setInProgress] = useState(false);
 
     const onCreateProductClicked = async data => {
-        console.log(data);
+        try {
+            setInProgress(true);
+            let response = await addProduct({
+                name: data.name,
+                description: data.description,
+                price: data.price,
+                isPublished: isPublished,
+                imageUrl: imageUrl
+            });
+            props.handleClose();
+        } catch (error) {
+            alert("Coś poszło nie tak, spróbuj ponownie");
+        } finally {
+            setInProgress(false);
+        }
     }
 
     const handleSwitchStateChange = () => {
@@ -129,7 +146,7 @@ function ProductManagementDialog(props) {
             <DialogContent className={classes.dialog}>
                 <Grid container spacing={3} className={classes.container}>
 
-                    <ImageUploader imageUrl={imageUrl} handleFileUpload={handleFileUpload} styles = {styles} classes = {classes} />
+                    <ImageUploader imageUrl={imageUrl} handleFileUpload={handleFileUpload} styles={styles} classes={classes} />
 
                     <Grid item xs={12}>
                         <form onSubmit={handleSubmit(onCreateProductClicked)}>
@@ -222,6 +239,10 @@ function ProductManagementDialog(props) {
                                     label="Czy opublikować?"
                                 />
                             </Grid>
+                                
+                            <Grid item xs={12} className={styles.centerChildren}>
+                                { isInProgress && <CircularProgress /> }
+                            </Grid>
 
                         </form>
                     </Grid>
@@ -237,20 +258,20 @@ function ImageUploader(props) {
     const { styles } = props;
 
     return (
-        <Grid container className = {classes.imageLoader} justify = "center">
-            <Grid item xs={12} sm = {3} md = {2} className={styles.centerChildren}>
+        <Grid container className={classes.imageLoader} justify="center">
+            <Grid item xs={12} sm={3} md={2} className={styles.centerChildren}>
                 {imageUrl === null
-                    ? <Image className = {classes.imageIcon} />
-                    : imageUrl === "" ? <Box className = {`${classes.imageIcon} ${styles.centerChildrenVertically}`}> <CircularProgress /> </Box>
-                        : <img className = {classes.imageIcon} src={imageUrl} />}
+                    ? <Image className={classes.imageIcon} />
+                    : imageUrl === "" ? <Box className={`${classes.imageIcon} ${styles.centerChildrenVertically}`}> <CircularProgress /> </Box>
+                        : <img className={classes.imageIcon} src={imageUrl} />}
             </Grid>
-            <Grid item xs={12} sm = {3} md = {2} className={styles.centerChildrenVertically}>
+            <Grid item xs={12} sm={3} md={2} className={styles.centerChildrenVertically}>
                 <Button
                     variant="contained"
                     component="label"
                     color="primary">
                     Dodaj zdjęcie
-                    <input type="file" hidden onChange={props.handleFileUpload} />
+                        <input type="file" hidden onChange={props.handleFileUpload} />
                 </Button>
             </Grid>
         </Grid>
