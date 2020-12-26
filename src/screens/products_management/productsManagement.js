@@ -28,7 +28,6 @@ function ProducstManagement() {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
-        console.log("ELLLO");
         setOpen(true);
     };
 

@@ -8,9 +8,17 @@ export const generalStyles = makeStyles({
         width: '100%'
     },
     centerChildren: {
-        textAlign: 'center'
+        textAlign: 'center',
     },
     input: {
         color: '#eeeeee',
     },
+    text: {
+        color: '#ffffff'
+    },
+    centerChildrenVertically: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 });
