@@ -9,11 +9,9 @@ export function onAuthStateChange() {
       if (user) {
         auth.currentUser.getIdToken().then(idToken => {
           axios.defaults.headers.common['Authorization'] = idToken;
-          localStorage.setItem('userId', user.uid);
         }).catch();
       } else {
           delete axios.defaults.headers.common['Authorization'];
-          localStorage.removeItem('userId');
       }
     });
 }
