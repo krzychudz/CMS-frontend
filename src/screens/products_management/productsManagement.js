@@ -4,6 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import ProductManagementDialog from '../../components/dialog/productManagementDialog';
 
 import { getUsersProducts } from '../../backend/productsRepository';
 
@@ -24,6 +25,17 @@ function ProducstManagement() {
     const classes = useStyles();
     const [isInProgress, setInProgress] = useState(false);
 
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        console.log("ELLLO");
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     useEffect(async () => {
         setInProgress(true);
         try {
@@ -38,12 +50,13 @@ function ProducstManagement() {
 
     return (
         <Container>
-            <Fab color = "primary" className={classes.fab}>
+            <Fab color = "primary" className={classes.fab} onClick = { handleClickOpen }>
                 <AddIcon />
             </Fab>
             {isInProgress && 
                 <CircularProgress />
             }
+            <ProductManagementDialog open = { open } handleClose = { handleClose } isInEditMode = {false} />
         </Container>
     );
 }
