@@ -99,7 +99,8 @@ function ProductManagementDialog(props) {
         const image = e.target.files[0];
         if (image) {
             const storage = firebaseApp.storage();
-            const imageUploadTask = storage.ref(`images/${image.name}`).put(image);
+            const fileName = `${Date.now()}_${image.name}}`;
+            const imageUploadTask = storage.ref(`images/${fileName}`).put(image);
 
             setImageUrl(""); // Set image URL uploading in progress
 
@@ -110,9 +111,10 @@ function ProductManagementDialog(props) {
                     onImageFetchedError();
                 }, async () => {
                     try {
-                        let imageUrl = await storage.ref('images').child(image.name).getDownloadURL();
+                        let imageUrl = await storage.ref('images').child(`${fileName}`).getDownloadURL();
                         setImageUrl(imageUrl);
                     } catch (error) {
+                        console.log(error);
                         onImageFetchedError();
                     }
                 });
