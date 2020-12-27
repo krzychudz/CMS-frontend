@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
     margin: {
         margin: '16px',
-        width: "40%"
+        width: "100%"
     },
     imageLoader: {
         margin: '22px 0 0 0'
@@ -82,6 +82,7 @@ function ProductManagementDialog(props) {
                 isPublished: isPublished,
                 imageUrl: imageUrl
             });
+            props.onProductAdded(response.data);
             props.handleClose();
         } catch (error) {
             alert("Coś poszło nie tak, spróbuj ponownie");
@@ -144,14 +145,14 @@ function ProductManagementDialog(props) {
                 </Toolbar>
             </AppBar>
             <DialogContent className={classes.dialog}>
-                <Grid container spacing={3} className={classes.container}>
+                <Grid container spacing={3} className={classes.container} justify="center">
 
                     <ImageUploader imageUrl={imageUrl} handleFileUpload={handleFileUpload} styles={styles} classes={classes} />
 
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                         <form onSubmit={handleSubmit(onCreateProductClicked)}>
-                            <Grid item xs={12} className={styles.centerChildren}>
-                                <FormControl className={`${classes.margin} ${styles.centerChildren}`} variant="standard">
+                            <Grid item xs={12}>
+                                <FormControl className={classes.margin} variant="standard">
                                     <Controller
                                         name="name"
                                         as={
@@ -174,8 +175,8 @@ function ProductManagementDialog(props) {
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={12} className={styles.centerChildren}>
-                                <FormControl className={`${classes.margin} ${styles.centerChildren}`} variant="standard">
+                            <Grid item xs={12}>
+                                <FormControl className={classes.margin} variant="standard">
                                     <Controller
                                         name="price"
                                         as={
@@ -199,8 +200,8 @@ function ProductManagementDialog(props) {
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={12} className={styles.centerChildren}>
-                                <FormControl className={`${classes.margin} ${styles.centerChildren}`} variant="standard">
+                            <Grid item xs={12}>
+                                <FormControl className={classes.margin} variant="standard">
                                     <Controller
                                         name="description"
                                         as={
@@ -225,9 +226,9 @@ function ProductManagementDialog(props) {
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={12} className={styles.centerChildren}>
+                            <Grid item xs={12}>
                                 <FormControlLabel
-                                    className={`${classes.margin} ${styles.centerChildren} ${styles.text}`}
+                                    className={`${classes.margin} ${styles.text}`}
                                     control={
                                         <Switch
                                             color="primary"
@@ -239,15 +240,16 @@ function ProductManagementDialog(props) {
                                     label="Czy opublikować?"
                                 />
                             </Grid>
-                                
-                            <Grid item xs={12} className={styles.centerChildren}>
-                                { isInProgress && <CircularProgress /> }
+
+                            <Grid item xs={12} className={`${styles.margin} ${styles.centerChildren}`}>
+                                {isInProgress && <CircularProgress />}
                             </Grid>
 
                         </form>
                     </Grid>
                 </Grid>
             </DialogContent>
+        
         </Dialog>
     );
 }

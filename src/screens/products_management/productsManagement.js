@@ -1,13 +1,11 @@
-import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ProductManagementDialog from '../../components/dialog/productManagementDialog';
 
+import { SuccessSnackbar } from '../../components/alert/alerts';
 import { getUsersProducts } from '../../backend/productsRepository';
-
 import { makeStyles } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
 
@@ -24,8 +22,13 @@ function ProducstManagement() {
 
     const classes = useStyles();
     const [isInProgress, setInProgress] = useState(false);
+    const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
 
     const [open, setOpen] = useState(false);
+
+    const onProductAdded = data => {
+        setShowSuccessSnackbar(true);
+    }
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -55,8 +58,9 @@ function ProducstManagement() {
             {isInProgress && 
                 <CircularProgress />
             }
-            <ProductManagementDialog open = { open } handleClose = { handleClose } isInEditMode = {false} />
-        </Container>
+            <ProductManagementDialog open = { open } handleClose = { handleClose } isInEditMode = {false} onProductAdded = {onProductAdded} />
+            <SuccessSnackbar open = {showSuccessSnackbar} onClose = {() => setShowSuccessSnackbar(false)} alertText = "Produkt został pomyślnie dodany!" />
+        </Container> 
     );
 }
 
