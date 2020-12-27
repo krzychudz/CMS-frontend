@@ -20,5 +20,8 @@ export const generalStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+    dialog: {
+        backgroundColor: 'rgba(0,0,0,0.2)',
+    },
 });
