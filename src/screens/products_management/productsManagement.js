@@ -2,9 +2,10 @@ import { Fab, CircularProgress, GridList, GridListTile, GridListTileBar, ListSub
 import { Add as AddIcon, Image, Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 
 import ProductManagementDialog from '../../components/dialog/productManagementDialog';
+import ConfirmationDialog from '../../components/dialog/confirmationDialog';
 
 import { SuccessSnackbar } from '../../components/alert/alerts';
-import { getUsersProducts } from '../../backend/productsRepository';
+import { getUsersProducts, removeProduct } from '../../backend/productsRepository';
 import { makeStyles } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
 
@@ -38,6 +39,9 @@ const useStyles = makeStyles(theme => ({
     icon: {
         color: '#ffffff'
     },
+    icon_delete: {
+        color: '#FF9494'
+    },
     text: {
         color: "#ffffff"
     },
@@ -53,22 +57,35 @@ function ProducstManagement() {
     const [isInProgress, setInProgress] = useState(false);
     const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
     const [productsData, setProductsData] = useState([]);
+    const [isDeleteDialogShown, setDeleteDialogShown] = useState();
+    const [productToRemoveId, setProductToRemove] = useState();
 
     const [open, setOpen] = useState(false);
-
-    const productManagementButtons =  [
-        <IconButton className={classes.icon}>
-            <EditIcon />
-        </IconButton>,
-        <IconButton className={classes.icon}>
-            <DeleteIcon />
-        </IconButton>]
 
     const onProductAdded = data => {
         let currentData = productsData;
         currentData.push(data);
         setProductsData(currentData);
         setShowSuccessSnackbar(true);
+    }
+
+    const performDeleteProduct = productId => {
+        setProductToRemove(productId);
+        setDeleteDialogShown(true);
+    }
+
+    const deleteProduct = async () => {
+        try {
+            let response = await removeProduct(productToRemoveId);
+            let removedProductId = response.data.removedId;
+            let currentData = productsData;
+            let filteredData = currentData.filter((product) => product.productId != removedProductId);
+            setProductsData(filteredData);
+        } catch (e) {
+            alert("Coś poszło nie tak, spróbuj ponownie!");
+        } finally {
+            setDeleteDialogShown(false);
+        }
     }
 
     const handleClickOpen = () => {
@@ -100,7 +117,7 @@ function ProducstManagement() {
                 : <GridList cellHeight={180} className={classes.gridList} cols={3} spacing={12}>
 
                     {productsData.filter((product) => product.isPublished).length != 0 &&
-                        <GridListTile key="Subheader" cols={3} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }} >
+                        <GridListTile key="Subheader_published" cols={3} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }} >
                             <ListSubheader component="div" className={classes.text}>Opublikowane</ListSubheader>
                         </GridListTile>
                     }
@@ -111,14 +128,21 @@ function ProducstManagement() {
                                 : <img src={product.imageUrl} />}
                             <GridListTileBar
                                 title={product.name}
-                                subtitle={ convertPrice(product.price) }
-                                actionIcon={productManagementButtons}
+                                subtitle={convertPrice(product.price)}
+                                actionIcon={[
+                                    <IconButton className={classes.icon}>
+                                        <EditIcon />
+                                    </IconButton>,
+                                    <IconButton className={classes.icon_delete} onClick={() => performDeleteProduct(product.productId)}>
+                                        <DeleteIcon />
+                                    </IconButton>]
+                                }
                             />
                         </GridListTile>
                     ))}
 
                     {productsData.filter((product) => !product.isPublished).length != 0 &&
-                        <GridListTile key="Subheader" cols={3} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }}  >
+                        <GridListTile key="Subheader_unpublished" cols={3} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }}  >
                             <ListSubheader component="div" className={classes.text}>Nieopublikowane</ListSubheader>
                         </GridListTile>
                     }
@@ -129,8 +153,15 @@ function ProducstManagement() {
                                 : <img src={product.imageUrl} />}
                             <GridListTileBar
                                 title={product.name}
-                                subtitle={ convertPrice(product.price) }
-                                actionIcon={productManagementButtons}
+                                subtitle={convertPrice(product.price)}
+                                actionIcon={[
+                                    <IconButton className={classes.icon}>
+                                        <EditIcon />
+                                    </IconButton>,
+                                    <IconButton className={classes.icon_delete} onClick={() => performDeleteProduct(product.productId)}>
+                                        <DeleteIcon />
+                                    </IconButton>]
+                                }
                             />
                         </GridListTile>
                     ))}
@@ -145,6 +176,14 @@ function ProducstManagement() {
                 <CircularProgress />
             }
             <ProductManagementDialog open={open} handleClose={handleClose} isInEditMode={false} onProductAdded={onProductAdded} />
+            <ConfirmationDialog
+                open={isDeleteDialogShown}
+                title="Usuwanie produktu"
+                description="Czy na pewno chcesz usunąć ten produkt?"
+                negativeButton="Nie"
+                positiveButton="Tak"
+                negativeButtonCallback={() => setDeleteDialogShown(false)}
+                positiveButtonCallback={deleteProduct} />
             <SuccessSnackbar open={showSuccessSnackbar} onClose={() => setShowSuccessSnackbar(false)} alertText="Produkt został pomyślnie dodany!" />
         </div>
     );

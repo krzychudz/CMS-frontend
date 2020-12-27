@@ -18,3 +18,12 @@ export const addProduct = async (body) => {
         throw ({'error': error});
     }
 }
+
+export const removeProduct = async (productId) => {
+    try {
+        let responseData = await axios.delete(`${baseUrl}users/products/${productId}`)
+        return responseData;
+    } catch (error) {
+        throw ({'error': error});
+    }
+}
