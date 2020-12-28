@@ -21,6 +21,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { makeStyles } from '@material-ui/core/styles';
 import { forwardRef, useState } from 'react';
 import { generalStyles } from '../../styles/mui/generalStyles';
+import { showGeneralAlertError } from '../alert/alerts';
 
 import { addProduct } from '../../backend/productsRepository';
 
@@ -84,8 +85,8 @@ function ProductManagementDialog(props) {
             });
             props.onProductAdded(response.data);
             props.handleClose();
-        } catch (error) {
-            alert("Coś poszło nie tak, spróbuj ponownie");
+        } catch (e) {
+            showGeneralAlertError(e.error);
         } finally {
             setInProgress(false);
         }
@@ -107,23 +108,22 @@ function ProductManagementDialog(props) {
             imageUploadTask.on('state_changed',
                 (snapshot) => {
 
-                }, (error) => {
-                    onImageFetchedError();
+                }, (e) => {
+                    onImageFetchedError(e);
                 }, async () => {
                     try {
                         let imageUrl = await storage.ref('images').child(`${fileName}`).getDownloadURL();
                         setImageUrl(imageUrl);
-                    } catch (error) {
-                        console.log(error);
-                        onImageFetchedError();
+                    } catch (e) {
+                        onImageFetchedError(e);
                     }
                 });
         }
     }
 
-    const onImageFetchedError = () => {
+    const onImageFetchedError = (e) => {
         setImageUrl(null);
-        alert("Coś poszło nie tak, spróbuj ponownie");
+        showGeneralAlertError(e.error);
     }
 
     return (

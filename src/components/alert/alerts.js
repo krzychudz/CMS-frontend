@@ -15,3 +15,7 @@ export function SuccessSnackbar(props) {
         </Snackbar>
     );
 }
+
+export function showGeneralAlertError(error) {
+    alert(`Coś poszło nie tak, spróbuj ponownie!\n${error}.`);
+}
