@@ -92,8 +92,9 @@ function ProductManagementDialog(props) {
 
     const handleFileUpload = async (e) => {
         try {
+            setImageUrl("");
             const image = e.target.files[0];
-            let imageUrl = uploadImageToFirebaseStorage(image);
+            let imageUrl = await uploadImageToFirebaseStorage(image);
             setImageUrl(imageUrl);
         } catch (e) {
             onImageFetchedError(e.error);
