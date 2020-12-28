@@ -6,55 +6,16 @@ import ConfirmationDialog from '../../components/dialog/confirmationDialog';
 
 import { SuccessSnackbar, showGeneralAlertError } from '../../components/alert/alerts';
 import { getUsersProducts, removeProduct } from '../../backend/productsRepository';
-import { makeStyles } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
 
 import { convertPrice } from '../../helpers/price/priceHelper';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-    },
-    fab: {
-        position: 'fixed',
-        bottom: theme.spacing(2),
-        right: theme.spacing(2),
-    },
-    fullScreen: {
-        width: '100%'
-    },
-    gridList: {
-        width: '100%'
-    },
-    gridItem: {
-        padding: '60px'
-    },
-    imageIcon: {
-        width: '100%',
-        height: '100px'
-    },
-    icon: {
-        color: '#ffffff'
-    },
-    icon_delete: {
-        color: '#FF9494'
-    },
-    text: {
-        color: "#ffffff"
-    },
-    centerText: {
-        textAlign: 'center',
-        marginTop: '16px'
-    }
-}));
+import { productManagementStyles } from './styles/productManagementStyles';
 
 
 function ProducstManagement() {
 
-    const classes = useStyles();
+    const classes = productManagementStyles();
     const [isInProgress, setInProgress] = useState(false);
     const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
     const [productsData, setProductsData] = useState(null);
@@ -62,6 +23,10 @@ function ProducstManagement() {
     const [productToRemoveId, setProductToRemove] = useState();
 
     const [open, setOpen] = useState(false);
+
+    const onProductClicked = data => {
+        console.log(data);
+    }
 
     const onProductAdded = data => {
         let currentData = productsData;
@@ -122,7 +87,7 @@ function ProducstManagement() {
                             </GridListTile>
                         }
                         {productsData.filter((product) => product.isPublished).map((product) => (
-                            <GridListTile key={product.productId}>
+                            <GridListTile key={product.productId} className = {classes.gridItem} onClick = {() => onProductClicked(product)}>
                                 {product.imageUrl == null
                                     ? <Image className={classes.imageIcon} />
                                     : <img src={product.imageUrl} />}
@@ -147,7 +112,7 @@ function ProducstManagement() {
                             </GridListTile>
                         }
                         {productsData.filter((product) => !product.isPublished).map((product) => (
-                            <GridListTile key={product.productId} className={classes.gridItem}>
+                            <GridListTile key={product.productId} className = {classes.gridItem} onClick = {() => onProductClicked(product)} >
                                 {product.imageUrl == null
                                     ? <Image className={classes.imageIcon} />
                                     : <img src={product.imageUrl} />}
