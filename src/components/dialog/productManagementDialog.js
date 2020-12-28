@@ -8,9 +8,7 @@ import { generalStyles } from '../../styles/mui/generalStyles';
 import { showGeneralAlertError } from '../alert/alerts';
 
 import { addProduct } from '../../backend/productsRepository';
-
-import 'firebase/storage';
-import firebaseApp from '../../firebaseConfig';
+import { uploadImageToFirebaseStorage } from '../../helpers/firebase/image/imageUpload';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -92,28 +90,13 @@ function ProductManagementDialog(props) {
         setIsPublished(!isPublished);
     }
 
-    const handleFileUpload = (e) => {
-        const image = e.target.files[0];
-        if (image) {
-            const storage = firebaseApp.storage();
-            const fileName = `${Date.now()}_${image.name}}`;
-            const imageUploadTask = storage.ref(`images/${fileName}`).put(image);
-
-            setImageUrl(""); // Set image URL uploading in progress
-
-            imageUploadTask.on('state_changed',
-                (snapshot) => {
-
-                }, (e) => {
-                    onImageFetchedError(e);
-                }, async () => {
-                    try {
-                        let imageUrl = await storage.ref('images').child(`${fileName}`).getDownloadURL();
-                        setImageUrl(imageUrl);
-                    } catch (e) {
-                        onImageFetchedError(e);
-                    }
-                });
+    const handleFileUpload = async (e) => {
+        try {
+            const image = e.target.files[0];
+            let imageUrl = uploadImageToFirebaseStorage(image);
+            setImageUrl(imageUrl);
+        } catch (e) {
+            onImageFetchedError(e.error);
         }
     }
 
@@ -271,7 +254,7 @@ function ImageUploader(props) {
                     component="label"
                     color="primary">
                     Dodaj zdjęcie
-                        <input type="file" hidden onChange={props.handleFileUpload} />
+                        <input type="file" hidden onChange={props.handleFileUpload}/>
                 </Button>
             </Grid>
         </Grid>
