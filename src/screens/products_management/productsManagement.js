@@ -24,12 +24,14 @@ function ProducstManagement() {
     const [productToEdit, setProductToEdit] = useState(null);
     const [isProductManagementShown, setProductManagementShown] = useState(false);
 
-    const onProductEditClicked = data => {
+    const onProductEditClicked = (element, data) => {
+        element.stopPropagation();
         setProductToEdit(data);
         setProductManagementShown(true);
     }
 
-    const onProductClicked = data => {
+    const onProductClicked = (element, data) => {
+        element.stopPropagation();
         setProductToDisplay(data);
     }
 
@@ -55,7 +57,8 @@ function ProducstManagement() {
         }
     }
 
-    const performDeleteProduct = productId => {
+    const performDeleteProduct = (element, productId) => {
+        element.stopPropagation();
         setProductToRemove(productId);
         setDeleteDialogShown(true);
     }
@@ -108,7 +111,7 @@ function ProducstManagement() {
                             </GridListTile>
                         }
                         {productsData.filter((product) => product.isPublished).map((product) => (
-                            <GridListTile key={product.productId} className = {classes.gridItem} onClick = {() => onProductClicked(product)}>
+                            <GridListTile key={product.productId} className = {classes.gridItem} onClick = {(e) => onProductClicked(e, product)}>
                                 {product.imageUrl == null
                                     ? <Image className={classes.imageIcon} />
                                     : <img src={product.imageUrl} />}
@@ -117,9 +120,9 @@ function ProducstManagement() {
                                     subtitle={convertPrice(product.price)}
                                     actionIcon={[
                                         <IconButton className={classes.icon}>
-                                            <EditIcon onClick = {() => onProductEditClicked(product)} />
+                                            <EditIcon onClick = {(e) => onProductEditClicked(e, product)} />
                                         </IconButton>,
-                                        <IconButton className={classes.icon_delete} onClick={() => performDeleteProduct(product.productId)}>
+                                        <IconButton className={classes.icon_delete} onClick={(e) => performDeleteProduct(e, product.productId)}>
                                             <DeleteIcon />
                                         </IconButton>]
                                     }
@@ -133,7 +136,7 @@ function ProducstManagement() {
                             </GridListTile>
                         }
                         {productsData.filter((product) => !product.isPublished).map((product) => (
-                            <GridListTile key={product.productId} className = {classes.gridItem} onClick = {() => onProductClicked(product)} >
+                            <GridListTile key={product.productId} className = {classes.gridItem} onClick = {(e) => onProductClicked(e, product)} >
                                 {product.imageUrl == null
                                     ? <Image className={classes.imageIcon} />
                                     : <img src={product.imageUrl} />}
@@ -142,9 +145,9 @@ function ProducstManagement() {
                                     subtitle={convertPrice(product.price)}
                                     actionIcon={[
                                         <IconButton className={classes.icon}>
-                                            <EditIcon onClick = {() => onProductEditClicked(product)} />
+                                            <EditIcon onClick = {(e) => onProductEditClicked(e, product)} />
                                         </IconButton>,
-                                        <IconButton className={classes.icon_delete} onClick={() => performDeleteProduct(product.productId)}>
+                                        <IconButton className={classes.icon_delete} onClick={(e) => performDeleteProduct(e, product.productId)}>
                                             <DeleteIcon />
                                         </IconButton>]
                                     }
