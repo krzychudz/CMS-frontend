@@ -36,3 +36,12 @@ export const getAllProducts = async () => {
         throw ({'error': error});
     }
 }
+
+export const editProduct = async (productId, body) => {
+    try {
+        let responseData = await axios.patch(`${baseUrl}users/products/${productId}`, body);
+        return responseData;
+    } catch (error) {
+        throw ({'error': error});
+    }
+}

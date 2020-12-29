@@ -21,8 +21,13 @@ function ProducstManagement() {
     const [isDeleteDialogShown, setDeleteDialogShown] = useState();
     const [productToRemoveId, setProductToRemove] = useState();
     const [productToDisplay, setProductToDisplay] = useState(null);
+    const [productToEdit, setProductToEdit] = useState(null);
+    const [isProductManagementShown, setProductManagementShown] = useState(false);
 
-    const [open, setOpen] = useState(false);
+    const onProductEditClicked = data => {
+        setProductToEdit(data);
+        setProductManagementShown(true);
+    }
 
     const onProductClicked = data => {
         setProductToDisplay(data);
@@ -33,6 +38,21 @@ function ProducstManagement() {
         currentData.push(data);
         setProductsData(currentData);
         setShowSuccessSnackbar(true);
+    }
+
+    const onProductEdited = data => {
+        let currentData = productsData;
+        let indexToUpdate = currentData.findIndex((item) => item.productId == data.productId);        
+        if (indexToUpdate != -1) {
+            let updatedProduct = currentData[indexToUpdate];
+            updatedProduct.name = data.name;
+            updatedProduct.description = data.description;
+            updatedProduct.price = data.price;
+            updatedProduct.isPublished = data.isPublished;
+            updatedProduct.imageUrl = data.imageUrl;
+            currentData[indexToUpdate] = updatedProduct;
+            setProductsData(currentData);
+        }
     }
 
     const performDeleteProduct = productId => {
@@ -55,11 +75,12 @@ function ProducstManagement() {
     }
 
     const handleClickOpen = () => {
-        setOpen(true);
+        setProductManagementShown(true);
     };
 
     const handleClose = () => {
-        setOpen(false);
+        setProductManagementShown(false);
+        setProductToEdit(null);
     };
 
     useEffect(async () => {
@@ -96,7 +117,7 @@ function ProducstManagement() {
                                     subtitle={convertPrice(product.price)}
                                     actionIcon={[
                                         <IconButton className={classes.icon}>
-                                            <EditIcon />
+                                            <EditIcon onClick = {() => onProductEditClicked(product)} />
                                         </IconButton>,
                                         <IconButton className={classes.icon_delete} onClick={() => performDeleteProduct(product.productId)}>
                                             <DeleteIcon />
@@ -121,7 +142,7 @@ function ProducstManagement() {
                                     subtitle={convertPrice(product.price)}
                                     actionIcon={[
                                         <IconButton className={classes.icon}>
-                                            <EditIcon />
+                                            <EditIcon onClick = {() => onProductEditClicked(product)} />
                                         </IconButton>,
                                         <IconButton className={classes.icon_delete} onClick={() => performDeleteProduct(product.productId)}>
                                             <DeleteIcon />
@@ -142,7 +163,7 @@ function ProducstManagement() {
                     <CircularProgress />
                 </div>
             }
-            <ProductManagementDialog open={open} handleClose={handleClose} isInEditMode={false} onProductAdded={onProductAdded} />
+            <ProductManagementDialog open={isProductManagementShown} handleClose={handleClose} isInEditMode={productToEdit != null} onProductAdded={onProductAdded} onProductEdited={onProductEdited} productData = {productToEdit} />
             <ConfirmationDialog
                 open={isDeleteDialogShown}
                 title="Usuwanie produktu"

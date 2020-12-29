@@ -39,7 +39,7 @@ function HomeScreen() {
 
             {productsData == null ? null :
                 (productsData.length === 0)
-                    ? <div className={classes.centerText}>Nie masz zadnych produktów.<br />Aby dodać nowe naciśnij + w prawym dolnym rogu ekranu.</div>
+                    ? <div className={classes.centerText}>Brak produktów do wyświetlenia.</div>
                     : <GridList cellHeight={180} className={classes.gridList} cols={3} spacing={12}>
 
 

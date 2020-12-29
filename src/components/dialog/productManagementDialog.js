@@ -3,11 +3,11 @@ import { Close as CloseIcon, Image } from '@material-ui/icons';
 
 import { useForm, Controller } from 'react-hook-form';
 import { makeStyles } from '@material-ui/core/styles';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useState, useRef } from 'react';
 import { generalStyles } from '../../styles/mui/generalStyles';
 import { showGeneralAlertError } from '../alert/alerts';
 
-import { addProduct } from '../../backend/productsRepository';
+import { addProduct, editProduct } from '../../backend/productsRepository';
 import { uploadImageToFirebaseStorage } from '../../helpers/firebase/image/imageUpload';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,8 +45,18 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+}
 
 function ProductManagementDialog(props) {
+
+    const { productData, isInEditMode, open } = props;
+
     const classes = useStyles();
     const styles = generalStyles();
 
@@ -54,6 +64,17 @@ function ProductManagementDialog(props) {
     const [isPublished, setIsPublished] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
     const [isInProgress, setInProgress] = useState(false);
+    const prevVisibility = usePrevious(open);
+
+    useEffect(() => {
+        if (open && !prevVisibility) {
+           if (productData != null) {
+               setIsPublished(productData.isPublished);
+               setImageUrl(productData.imageUrl);
+           }
+        }
+      }, [open, prevVisibility]);
+    
 
     const clearDialogData = () => {
         setImageUrl(null);
@@ -65,19 +86,26 @@ function ProductManagementDialog(props) {
         props.handleClose();
     }
 
-    const onCreateProductClicked = async data => {
+    const manageProduct = async data => {
         try {
             setInProgress(true);
-            let response = await addProduct({
+
+            let body = {
                 name: data.name,
                 description: data.description,
                 price: data.price,
                 isPublished: isPublished,
                 imageUrl: imageUrl
-            });
+            }
+
+            let response = isInEditMode ? await editProduct(productData.productId, body) : await addProduct(body);
 
             clearDialogData();
-            props.onProductAdded(response.data);
+            if (isInEditMode) {
+                props.onProductEdited(response.data);
+            } else {
+                props.onProductAdded(response.data);
+            }
             props.handleClose();
         } catch (e) {
             showGeneralAlertError(e.error);
@@ -108,7 +136,7 @@ function ProductManagementDialog(props) {
 
     return (
         <Dialog
-            open={props.open}
+            open={open}
             onClose={clearAndClose}
             fullScreen
             TransitionComponent={Transition}>
@@ -119,10 +147,10 @@ function ProductManagementDialog(props) {
                         <CloseIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        {props.isInEditMode ? "Edytuj Produkt" : "Dodaj nowy produkt"}
+                        {isInEditMode ? "Edytuj Produkt" : "Dodaj nowy produkt"}
                     </Typography>
-                    <Button autoFocus color="inherit" onClick={handleSubmit(onCreateProductClicked)}>
-                        {props.isInEditMode ? "Zapisz" : "Dodaj"}
+                    <Button autoFocus color="inherit" onClick={handleSubmit(manageProduct)}>
+                        {isInEditMode ? "Zapisz" : "Dodaj"}
                     </Button>
                 </Toolbar>
             </AppBar>
@@ -132,7 +160,7 @@ function ProductManagementDialog(props) {
                     <ImageUploader imageUrl={imageUrl} handleFileUpload={handleFileUpload} styles={styles} classes={classes} />
 
                     <Grid item xs={6}>
-                        <form onSubmit={handleSubmit(onCreateProductClicked)}>
+                        <form onSubmit={handleSubmit(manageProduct)}>
                             <Grid item xs={12}>
                                 <FormControl className={classes.margin} variant="standard">
                                     <Controller
@@ -149,7 +177,7 @@ function ProductManagementDialog(props) {
                                                 }} />
                                         }
                                         control={control}
-                                        defaultValue=""
+                                        defaultValue= {productData == null ? "" : productData.name}
                                         rules={{
                                             required: 'Pole wymagane',
                                         }}
@@ -174,7 +202,7 @@ function ProductManagementDialog(props) {
                                             />
                                         }
                                         control={control}
-                                        defaultValue=""
+                                        defaultValue= {productData == null ? "" : productData.price}
                                         rules={{
                                             required: 'Pole wymagane',
                                         }}
@@ -200,7 +228,7 @@ function ProductManagementDialog(props) {
                                             />
                                         }
                                         control={control}
-                                        defaultValue=""
+                                        defaultValue= {productData == null ? "" : productData.description}
                                         rules={{
                                             required: 'Pole wymagane',
                                         }}
