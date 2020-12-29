@@ -3,15 +3,14 @@ import { Add as AddIcon, Image, Delete as DeleteIcon, Edit as EditIcon } from '@
 
 import ProductManagementDialog from '../../components/dialog/productManagementDialog';
 import ConfirmationDialog from '../../components/dialog/confirmationDialog';
+import ProductDetailslDialog from '../../components/dialog/productDetailsDialog';
 
 import { SuccessSnackbar, showGeneralAlertError } from '../../components/alert/alerts';
 import { getUsersProducts, removeProduct } from '../../backend/productsRepository';
 import { useEffect, useState } from 'react';
 
 import { convertPrice } from '../../helpers/price/priceHelper';
-
 import { productManagementStyles } from './styles/productManagementStyles';
-
 
 function ProducstManagement() {
 
@@ -21,11 +20,13 @@ function ProducstManagement() {
     const [productsData, setProductsData] = useState(null);
     const [isDeleteDialogShown, setDeleteDialogShown] = useState();
     const [productToRemoveId, setProductToRemove] = useState();
+    const [productToDisplay, setProductToDisplay] = useState(null);
 
     const [open, setOpen] = useState(false);
 
     const onProductClicked = data => {
         console.log(data);
+        setProductToDisplay(data);
     }
 
     const onProductAdded = data => {
@@ -152,6 +153,7 @@ function ProducstManagement() {
                 negativeButtonCallback={() => setDeleteDialogShown(false)}
                 positiveButtonCallback={deleteProduct} />
             <SuccessSnackbar open={showSuccessSnackbar} onClose={() => setShowSuccessSnackbar(false)} alertText="Produkt został pomyślnie dodany!" />
+            <ProductDetailslDialog open = {productToDisplay != null} handleClose = {() => setProductToDisplay(null)} product = {productToDisplay} isPreviewMode = {true} />
         </div>
     );
 }

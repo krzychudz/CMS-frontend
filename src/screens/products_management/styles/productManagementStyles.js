@@ -4,8 +4,9 @@ export const productManagementStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         overflow: 'hidden',
+        width: '100%'
     },
     fab: {
         position: 'fixed',

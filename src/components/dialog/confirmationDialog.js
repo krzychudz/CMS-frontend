@@ -18,8 +18,8 @@ function ConfirmationDialog(props) {
              }}>
             <DialogTitle id="alert-dialog-title" className = {styles.text}>{props.title}</DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description" className = {styles.text}>
-                    {props.description}
+                <DialogContentText id="alert-dialog-description">
+                    <div className = {styles.text}>{props.description}</div>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

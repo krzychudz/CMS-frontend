@@ -24,4 +24,13 @@ export const generalStyles = makeStyles({
     dialog: {
         backgroundColor: 'rgba(0,0,0,0.2)',
     },
+    dialogIcon: {
+        minHeight: '180px'
+    },
+    dialogImage: {
+        width: '100px',
+        height: '100px',
+        color: '#ffffff',
+        textAlign: 'center'
+    }
 });
