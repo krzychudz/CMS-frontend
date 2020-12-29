@@ -27,3 +27,12 @@ export const removeProduct = async (productId) => {
         throw ({'error': error});
     }
 }
+
+export const getAllProducts = async () => {
+    try {
+        let responseData = await axios.get(`${baseUrl}products`)
+        return responseData;
+    } catch (error) {
+        throw ({'error': error});
+    }
+}

@@ -25,7 +25,6 @@ function ProducstManagement() {
     const [open, setOpen] = useState(false);
 
     const onProductClicked = data => {
-        console.log(data);
         setProductToDisplay(data);
     }
 

@@ -11,7 +11,6 @@ export const dialogStyles = makeStyles({
         padding: 0
     },
     dialogProductInfo: {
-        textAlign: 'center',
         padding: '16px'
     },
     dialogProductImage: {
