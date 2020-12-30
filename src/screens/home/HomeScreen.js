@@ -10,7 +10,10 @@ import { convertPrice } from '../../helpers/price/priceHelper';
 import { productManagementStyles } from '../products_management/styles/productManagementStyles';
 import { showGeneralAlertError } from '../../components/alert/alerts';
 import { getGridListCols } from '../../helpers/grid/gridColumns';
+import { useHistory } from "react-router-dom";
 import withWidth from '@material-ui/core/withWidth';
+
+
 
 function HomeScreen(props) {
 
@@ -18,6 +21,8 @@ function HomeScreen(props) {
     const [isInProgress, setInProgress] = useState(false);
     const [productsData, setProductsData] = useState(null);
     const [productToDisplay, setProductToDisplay] = useState(null);
+
+    const history = useHistory(); 
 
     useEffect(async () => {
         setInProgress(true);
@@ -33,7 +38,10 @@ function HomeScreen(props) {
     }, []);
 
     const onProductClicked = data => {
-        setProductToDisplay(data);
+        //setProductToDisplay(data);
+        history.push('/product_details', {
+            product: data
+        })
     }
 
     return (
