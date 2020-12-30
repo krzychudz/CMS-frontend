@@ -11,8 +11,10 @@ import { useEffect, useState } from 'react';
 
 import { convertPrice } from '../../helpers/price/priceHelper';
 import { productManagementStyles } from './styles/productManagementStyles';
+import { getGridListCols } from '../../helpers/grid/gridColumns';
+import withWidth from '@material-ui/core/withWidth';
 
-function ProducstManagement() {
+function ProducstManagement(props) {
 
     const classes = productManagementStyles();
     const [isInProgress, setInProgress] = useState(false);
@@ -103,10 +105,10 @@ function ProducstManagement() {
             {productsData == null ? null :
                 (productsData.length === 0)
                     ? <div className={classes.centerText}>Nie masz zadnych produktów.<br />Aby dodać nowe naciśnij + w prawym dolnym rogu ekranu.</div>
-                    : <GridList cellHeight={180} className={classes.gridList} cols={3} spacing={12}>
+                    : <GridList cellHeight={180} className={classes.gridList} cols={getGridListCols(props)} spacing={12}>
 
                         {productsData.filter((product) => product.isPublished).length != 0 &&
-                            <GridListTile key="Subheader_published" cols={3} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }} >
+                            <GridListTile key="Subheader_published" cols={getGridListCols(props)} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }} >
                                 <ListSubheader component="div" className={classes.text}>Opublikowane</ListSubheader>
                             </GridListTile>
                         }
@@ -131,7 +133,7 @@ function ProducstManagement() {
                         ))}
 
                         {productsData.filter((product) => !product.isPublished).length != 0 &&
-                            <GridListTile key="Subheader_unpublished" cols={3} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }}  >
+                            <GridListTile key="Subheader_unpublished" cols={getGridListCols(props)} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }}  >
                                 <ListSubheader component="div" className={classes.text}>Nieopublikowane</ListSubheader>
                             </GridListTile>
                         }
@@ -160,7 +162,7 @@ function ProducstManagement() {
 
             <Fab color="primary" className={classes.fab} onClick={handleClickOpen}>
                 <AddIcon />
-            </Fab>
+            </Fab> 
             {isInProgress &&
                 <div className={classes.centerText}>
                     <CircularProgress />
@@ -181,4 +183,4 @@ function ProducstManagement() {
     );
 }
 
-export default ProducstManagement;
+export default withWidth()(ProducstManagement);

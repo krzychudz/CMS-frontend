@@ -9,8 +9,10 @@ import { useEffect, useState } from 'react';
 import { convertPrice } from '../../helpers/price/priceHelper';
 import { productManagementStyles } from '../products_management/styles/productManagementStyles';
 import { showGeneralAlertError } from '../../components/alert/alerts';
+import { getGridListCols } from '../../helpers/grid/gridColumns';
+import withWidth from '@material-ui/core/withWidth';
 
-function HomeScreen() {
+function HomeScreen(props) {
 
     const classes = productManagementStyles();
     const [isInProgress, setInProgress] = useState(false);
@@ -40,10 +42,10 @@ function HomeScreen() {
             {productsData == null ? null :
                 (productsData.length === 0)
                     ? <div className={classes.centerText}>Brak produktów do wyświetlenia.</div>
-                    : <GridList cellHeight={180} className={classes.gridList} cols={3} spacing={12}>
+                    : <GridList cellHeight={180} className={classes.gridList} cols={getGridListCols(props)} spacing={12}>
 
 
-                        <GridListTile key="Subheader_all_products" cols={3} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }} >
+                        <GridListTile key="Subheader_all_products" cols={getGridListCols(props)} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }} >
                             <ListSubheader component="div" className={classes.text}>Produkty</ListSubheader>
                         </GridListTile>
 
@@ -65,9 +67,9 @@ function HomeScreen() {
                     <CircularProgress />
                 </div>
             }
-            <ProductDetailslDialog open = {productToDisplay != null} handleClose = {() => setProductToDisplay(null)} product = {productToDisplay} isPreviewMode = {true} />
+            <ProductDetailslDialog open={productToDisplay != null} handleClose={() => setProductToDisplay(null)} product={productToDisplay} isPreviewMode={true} />
         </div>
     );
 }
 
-export default HomeScreen;
+export default withWidth()(HomeScreen);
