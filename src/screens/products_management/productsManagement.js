@@ -8,6 +8,7 @@ import ProductDetailslDialog from '../../components/dialog/productDetailsDialog'
 import { SuccessSnackbar, showGeneralAlertError } from '../../components/alert/alerts';
 import { getUsersProducts, removeProduct } from '../../backend/productsRepository';
 import { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 
 import { convertPrice } from '../../helpers/price/priceHelper';
 import { productManagementStyles } from './styles/productManagementStyles';
@@ -25,6 +26,7 @@ function ProducstManagement(props) {
     const [productToDisplay, setProductToDisplay] = useState(null);
     const [productToEdit, setProductToEdit] = useState(null);
     const [isProductManagementShown, setProductManagementShown] = useState(false);
+    const history = useHistory(); 
 
     const onProductEditClicked = (element, data) => {
         element.stopPropagation();
@@ -34,7 +36,11 @@ function ProducstManagement(props) {
 
     const onProductClicked = (element, data) => {
         element.stopPropagation();
-        setProductToDisplay(data);
+        //setProductToDisplay(data);
+        history.push('/product_details', {
+            product: data,
+            previewMode: true
+        })
     }
 
     const onProductAdded = data => {
