@@ -8,10 +8,12 @@ export function onAuthStateChange() {
     return auth.onAuthStateChanged(user => {
       if (user) {
         auth.currentUser.getIdToken().then(idToken => {
+          localStorage.setItem('isUserLoggedIn', 'true');
           axios.defaults.headers.common['Authorization'] = idToken;
         }).catch();
       } else {
           delete axios.defaults.headers.common['Authorization'];
+          localStorage.removeItem('isUserLoggedIn');
       }
     });
 }

@@ -45,3 +45,12 @@ export const editProduct = async (productId, body) => {
         throw ({'error': error});
     }
 }
+
+export const sendEmail = async (body) => {
+    try {
+        let responseData = await axios.post(`${baseUrl}send_email`, body);
+        return responseData;
+    } catch (error) {
+        throw ({'error': error});
+    }
+}
