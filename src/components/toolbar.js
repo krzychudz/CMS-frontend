@@ -7,6 +7,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import HomeIcon from '@material-ui/icons/Home';
 import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -20,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         textAlign: 'start'
     },
+    homeIcon: {
+        width: '40px',
+        height: '40px'
+    }
 }));
 
 
@@ -82,7 +87,14 @@ const MainAppBar = withRouter(({ history }) => {
 
         <AppBar position="sticky" color="secondary">
             <Toolbar>
-                <Button color="inherit" onClick={() => history.replace('/')} >Home</Button>
+                <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    color="inherit"
+                    onClick={() => history.replace('/')}>
+                    <HomeIcon className={classes.homeIcon}/>
+                </IconButton>
 
                 <Box className={classes.title}> </Box>
                 {shouldDisplayLoginButton ?

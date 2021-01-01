@@ -1,5 +1,5 @@
-import { Dialog, DialogContent, Button, Slide, AppBar, Toolbar, Typography, FormControl, Box, TextField, CircularProgress, IconButton, FormControlLabel, Grid, Switch, Divider } from '@material-ui/core';
-import { Image } from '@material-ui/icons';
+import { Dialog, DialogContent, Button, Slide, AppBar, Toolbar, Typography, FormControl, Box, TextField, CircularProgress, IconButton, FormControlLabel, Grid, Switch, Divider , Link} from '@material-ui/core';
+import { Image, ContactMail } from '@material-ui/icons';
 
 import { useHistory } from "react-router-dom";
 import { useState } from 'react';
@@ -72,7 +72,9 @@ function ProductDetailsScreen(props) {
             </Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`}><b>Nazwa:</b> {productData.name}</Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`}><b>Cena:</b> {convertPrice(productData.price)}</Grid>
-            <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`}><b>Sprzedawca: </b>{productData.ownerEmail}</Grid>
+            <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`} justify="center">
+                <b>Sprzedawca: </b>{productData.ownerEmail} {isUserLoggedIn && <Link href = "#owner_contact"> <ContactMail/> </Link> }
+            </Grid>
             <Grid item xs={12}> <Divider className={productDetailsScreenStyles.divider} variant="middle" /> </Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productDescription}`}>
                 {productData.description}
@@ -80,7 +82,7 @@ function ProductDetailsScreen(props) {
             <Grid item xs={12}> <Divider className={productDetailsScreenStyles.divider} variant="middle" /> </Grid>
             <Grid item xs={12} className={styles.centerChildren}>Kontakt ze sprzedawcą</Grid>
             { isUserLoggedIn != null &&
-                <Grid item xs={12} className={styles.centerChildren}>
+                <Grid item xs={12} className={styles.centerChildren} id="owner_contact">
 
                     <form onSubmit={handleSubmit(sendMessage)}>
                         <Grid item xs={12}>
