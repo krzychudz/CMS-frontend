@@ -2,7 +2,7 @@ import { Dialog, DialogContent, Button, Slide, AppBar, Toolbar, Typography, Form
 import { Image, ContactMail } from '@material-ui/icons';
 
 import { useHistory } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { generalStyles } from '../../styles/mui/generalStyles';
 import { makeStyles } from '@material-ui/core/styles';
 import { convertPrice } from '../../helpers/price/priceHelper';
@@ -31,6 +31,9 @@ const screenStyles = makeStyles(theme => ({
     formItem: {
         width: '60%',
         margin: '16px'
+    },
+    icon: {
+        color: "#ffffff"
     }
 }));
 
@@ -38,6 +41,7 @@ function ProductDetailsScreen() {
     const styles = generalStyles();
     const productDetailsScreenStyles = screenStyles();
     const history = useHistory();
+    const formRef = useRef(null);
 
     const { handleSubmit, control, errors: fieldsErrors, reset } = useForm();
     const [isInProgress, setIsInProgress] = useState(false);
@@ -47,6 +51,8 @@ function ProductDetailsScreen() {
     const previewMode = history.location.state.previewMode;
 
     const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+
+    const scrollToForm = () => formRef.current.scrollIntoView() 
 
     const sendMessage = async (data) => {
         try {
@@ -75,7 +81,7 @@ function ProductDetailsScreen() {
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`}><b>Nazwa:</b> {productData.name}</Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`}><b>Cena:</b> {convertPrice(productData.price)}</Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`} justify="center">
-                <b>Sprzedawca: </b>{productData.ownerEmail} {(isUserLoggedIn && !previewMode) && <Link href="#owner_contact"> <ContactMail /> </Link>}
+                <b>Sprzedawca: </b>{productData.ownerEmail} {(isUserLoggedIn && !previewMode) && <IconButton className={productDetailsScreenStyles.icon} onClick = {scrollToForm}> <ContactMail /> </IconButton>}
             </Grid>
             <Grid item xs={12}> <Divider className={productDetailsScreenStyles.divider} variant="middle" /> </Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productDescription}`}>
@@ -86,7 +92,7 @@ function ProductDetailsScreen() {
                 <Grid item xs={12} className={styles.centerChildren}>Kontakt ze sprzedawcą</Grid>
             }
             { (!previewMode && isUserLoggedIn != null) &&
-                <Grid item xs={12} className={styles.centerChildren} id="owner_contact">
+                <Grid item xs={12} className={styles.centerChildren} ref={formRef}>
 
                     <form onSubmit={handleSubmit(sendMessage)}>
                         <Grid item xs={12}>

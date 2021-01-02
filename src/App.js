@@ -8,8 +8,8 @@ import mainTheme from './muiTheme';
 
 import { ThemeProvider } from '@material-ui/core/styles';
 import { onAuthStateChange } from './helpers/firebase/firebaseAuthObserver';
-import { useHistory } from "react-router-dom";
 import React, { useEffect } from 'react';
+import ScrollRestoration from 'react-scroll-restoration'
 
 import {
   BrowserRouter as Router,
@@ -32,6 +32,8 @@ function App() {
   return (
     <ThemeProvider theme = { mainTheme }>
       <Router>
+
+      <ScrollRestoration />
 
       <MainAppBar />
 

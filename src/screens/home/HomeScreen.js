@@ -40,7 +40,8 @@ function HomeScreen(props) {
     const onProductClicked = data => {
         //setProductToDisplay(data);
         history.push('/product_details', {
-            product: data
+            product: data,
+            previewMode: false
         })
     }
 
