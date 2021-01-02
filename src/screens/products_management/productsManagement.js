@@ -3,7 +3,6 @@ import { Add as AddIcon, Image, Delete as DeleteIcon, Edit as EditIcon } from '@
 
 import ProductManagementDialog from '../../components/dialog/productManagementDialog';
 import ConfirmationDialog from '../../components/dialog/confirmationDialog';
-import ProductDetailslDialog from '../../components/dialog/productDetailsDialog';
 
 import { SuccessSnackbar, showGeneralAlertError } from '../../components/alert/alerts';
 import { getUsersProducts, removeProduct } from '../../backend/productsRepository';
@@ -19,11 +18,10 @@ function ProducstManagement(props) {
 
     const classes = productManagementStyles();
     const [isInProgress, setInProgress] = useState(false);
-    const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
+    const [successSnackbarMessage, setSuccessSnackbarMessage] = useState("");
     const [productsData, setProductsData] = useState(null);
     const [isDeleteDialogShown, setDeleteDialogShown] = useState();
     const [productToRemoveId, setProductToRemove] = useState();
-    const [productToDisplay, setProductToDisplay] = useState(null);
     const [productToEdit, setProductToEdit] = useState(null);
     const [isProductManagementShown, setProductManagementShown] = useState(false);
     const history = useHistory(); 
@@ -36,7 +34,6 @@ function ProducstManagement(props) {
 
     const onProductClicked = (element, data) => {
         element.stopPropagation();
-        //setProductToDisplay(data);
         history.push('/product_details', {
             product: data,
             previewMode: true
@@ -47,7 +44,7 @@ function ProducstManagement(props) {
         let currentData = productsData;
         currentData.push(data);
         setProductsData(currentData);
-        setShowSuccessSnackbar(true);
+        setSuccessSnackbarMessage("Produkt został dodany!");
     }
 
     const onProductEdited = data => {
@@ -62,6 +59,7 @@ function ProducstManagement(props) {
             updatedProduct.imageUrl = data.imageUrl;
             currentData[indexToUpdate] = updatedProduct;
             setProductsData(currentData);
+            setSuccessSnackbarMessage("Produkt został zaktualizowany!");
         }
     }
 
@@ -78,6 +76,7 @@ function ProducstManagement(props) {
             let currentData = productsData;
             let filteredData = currentData.filter((product) => product.productId != removedProductId);
             setProductsData(filteredData);
+            setSuccessSnackbarMessage("Produkt został usunięty!");
         } catch (e) {
             showGeneralAlertError(e.error);
         } finally {
@@ -183,8 +182,7 @@ function ProducstManagement(props) {
                 positiveButton="Tak"
                 negativeButtonCallback={() => setDeleteDialogShown(false)}
                 positiveButtonCallback={deleteProduct} />
-            <SuccessSnackbar open={showSuccessSnackbar} onClose={() => setShowSuccessSnackbar(false)} alertText="Produkt został pomyślnie dodany!" />
-            <ProductDetailslDialog open = {productToDisplay != null} handleClose = {() => setProductToDisplay(null)} product = {productToDisplay} isPreviewMode = {true} />
+            <SuccessSnackbar open={successSnackbarMessage != ""} onClose={() => setSuccessSnackbarMessage("")} alertText={successSnackbarMessage} />
         </div>
     );
 }

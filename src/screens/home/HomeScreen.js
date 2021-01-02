@@ -1,8 +1,6 @@
 import { CircularProgress, GridList, GridListTile, GridListTileBar, ListSubheader } from '@material-ui/core';
 import { Image } from '@material-ui/icons';
 
-import ProductDetailslDialog from '../../components/dialog/productDetailsDialog';
-
 import { getAllProducts } from '../../backend/productsRepository';
 import { useEffect, useState } from 'react';
 
@@ -20,9 +18,8 @@ function HomeScreen(props) {
     const classes = productManagementStyles();
     const [isInProgress, setInProgress] = useState(false);
     const [productsData, setProductsData] = useState(null);
-    const [productToDisplay, setProductToDisplay] = useState(null);
 
-    const history = useHistory(); 
+    const history = useHistory();
 
     useEffect(async () => {
         setInProgress(true);
@@ -30,6 +27,7 @@ function HomeScreen(props) {
             let response = await getAllProducts();
             console.log(response.data);
             setProductsData(response.data);
+            localStorage.setItem("testData", "true");
         } catch (e) {
             showGeneralAlertError(e.error);
         } finally {
@@ -76,7 +74,6 @@ function HomeScreen(props) {
                     <CircularProgress />
                 </div>
             }
-            <ProductDetailslDialog open={productToDisplay != null} handleClose={() => setProductToDisplay(null)} product={productToDisplay} isPreviewMode={true} />
         </div>
     );
 }
