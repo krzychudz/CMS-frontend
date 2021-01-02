@@ -7,13 +7,14 @@ const auth = firebaseApp.auth();
 export function onAuthStateChange() {
     return auth.onAuthStateChanged(user => {
       if (user) {
-        auth.currentUser.getIdToken().then(idToken => {
-          localStorage.setItem('isUserLoggedIn', 'true');
+        user.getIdToken().then(idToken => {
+          localStorage.setItem('isUserLoggedIn', true);
+          localStorage.setItem('currentUserEmail', user.email);
           axios.defaults.headers.common['Authorization'] = idToken;
         }).catch();
       } else {
           delete axios.defaults.headers.common['Authorization'];
-          localStorage.removeItem('isUserLoggedIn');
+          localStorage.clear();
       }
     });
 }

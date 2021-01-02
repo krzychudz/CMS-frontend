@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import 'firebase/auth';
 import firebaseApp from '../firebaseConfig';
+import { Divider } from '@material-ui/core';
 
 const auth = firebaseApp.auth();
 
@@ -35,6 +36,8 @@ const MainAppBar = withRouter(({ history }) => {
     const [isUserLoggedIn, setUserLoggedIn] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+
+    const currentUserEmail = localStorage.getItem('currentUserEmail');
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -79,7 +82,7 @@ const MainAppBar = withRouter(({ history }) => {
         return () => {
             unsubscribe();
         }
-    });
+    }, []);
 
 
 
@@ -121,6 +124,8 @@ const MainAppBar = withRouter(({ history }) => {
                             }}
                             open={open}
                             onClose={handleMenuClose}>
+                            <MenuItem>{currentUserEmail}</MenuItem>
+                            <Divider />
                             <MenuItem onClick={handleProfileClick}>Moje konto</MenuItem>
                             <MenuItem onClick={handleLogout}>Wyloguj</MenuItem>
                         </Menu>
