@@ -194,7 +194,7 @@ function ProductManagementDialog(props) {
                                                 id="price"
                                                 helperText={fieldsErrors.price ? fieldsErrors.price.message : null}
                                                 variant="standard"
-                                                label="Cena"
+                                                label="Cena [gr]"
                                                 error={fieldsErrors.price !== undefined}
                                                 InputProps={{
                                                     className: styles.input
@@ -205,6 +205,10 @@ function ProductManagementDialog(props) {
                                         defaultValue= {productData == null ? "" : productData.price}
                                         rules={{
                                             required: 'Pole wymagane',
+                                            pattern: {
+                                                value: /^[0-9]+$/i,
+                                                message: 'Dozwolone tylko liczby'
+                                            }
                                         }}
                                     />
                                 </FormControl>
