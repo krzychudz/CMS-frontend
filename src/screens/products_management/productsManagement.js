@@ -20,7 +20,7 @@ function ProducstManagement(props) {
     const [isInProgress, setInProgress] = useState(false);
     const [successSnackbarMessage, setSuccessSnackbarMessage] = useState("");
     const [productsData, setProductsData] = useState(null);
-    const [isDeleteDialogShown, setDeleteDialogShown] = useState();
+    const [isDeleteDialogShown, setDeleteDialogShown] = useState(false);
     const [productToRemoveId, setProductToRemove] = useState();
     const [productToEdit, setProductToEdit] = useState(null);
     const [isProductManagementShown, setProductManagementShown] = useState(false);
