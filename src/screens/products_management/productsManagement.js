@@ -129,8 +129,8 @@ function ProducstManagement(props) {
                                     title={product.name}
                                     subtitle={convertPrice(product.price)}
                                     actionIcon={[
-                                        <IconButton className={classes.icon}>
-                                            <EditIcon onClick={(e) => onProductEditClicked(e, product)} />
+                                        <IconButton className={classes.icon} onClick={(e) => onProductEditClicked(e, product)} >
+                                            <EditIcon />
                                         </IconButton>,
                                         <IconButton className={classes.icon_delete} onClick={(e) => performDeleteProduct(e, product.productId)}>
                                             <DeleteIcon />
@@ -154,8 +154,8 @@ function ProducstManagement(props) {
                                     title={product.name}
                                     subtitle={convertPrice(product.price)}
                                     actionIcon={[
-                                        <IconButton className={classes.icon}>
-                                            <EditIcon onClick={(e) => onProductEditClicked(e, product)} />
+                                        <IconButton className={classes.icon} onClick={(e) => onProductEditClicked(e, product)} >
+                                            <EditIcon />
                                         </IconButton>,
                                         <IconButton className={classes.icon_delete} onClick={(e) => performDeleteProduct(e, product.productId)}>
                                             <DeleteIcon />

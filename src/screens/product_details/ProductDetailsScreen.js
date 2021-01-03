@@ -65,7 +65,7 @@ function ProductDetailsScreen() {
             setSuccessSnackbarVisibility(true);
             reset();
         } catch (e) {
-            showGeneralAlertError(e.error);
+            showGeneralAlertError(e.message);
         } finally {
             setIsInProgress(false);
         }
@@ -80,7 +80,7 @@ function ProductDetailsScreen() {
             </Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`}><b>Nazwa:</b> {productData.name}</Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`}><b>Cena:</b> {convertPrice(productData.price)}</Grid>
-            <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`} justify="center">
+            <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productInfo}`}>
                 <b>Sprzedawca: </b>{productData.ownerEmail} {(isUserLoggedIn && !previewMode) && <IconButton className={productDetailsScreenStyles.icon} onClick={scrollToForm}> <ContactMail /> </IconButton>}
             </Grid>
             <Grid item xs={12}> <Divider className={productDetailsScreenStyles.divider} variant="middle" /> </Grid>

@@ -29,7 +29,7 @@ function HomeScreen(props) {
                 setProductsData(response.data);
                 localStorage.setItem("testData", "true");
             } catch (e) {
-                showGeneralAlertError(e.error);
+                showGeneralAlertError(e.message);
             } finally {
                 setInProgress(false);
             }
