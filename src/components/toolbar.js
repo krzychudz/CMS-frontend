@@ -69,7 +69,7 @@ const MainAppBar = withRouter(({ history }) => {
         return () => {
             unsubscribe();
         };
-    }, []);
+    }, [history]);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {

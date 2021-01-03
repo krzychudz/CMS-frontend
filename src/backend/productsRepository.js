@@ -6,7 +6,7 @@ export const getUsersProducts = async () => {
         let responseData = await axios.get(`${baseUrl}users/products`)
         return responseData;
     } catch (error) {
-        throw ({ 'error': error });
+        throw error;
     }
 }
 
@@ -15,7 +15,7 @@ export const addProduct = async (body) => {
         let responseData = await axios.post(`${baseUrl}users/products`, body);
         return responseData;
     } catch (error) {
-        throw ({'error': error});
+        throw error;
     }
 }
 
@@ -24,7 +24,7 @@ export const removeProduct = async (productId) => {
         let responseData = await axios.delete(`${baseUrl}users/products/${productId}`)
         return responseData;
     } catch (error) {
-        throw ({'error': error});
+        throw error;
     }
 }
 
@@ -33,7 +33,7 @@ export const getAllProducts = async () => {
         let responseData = await axios.get(`${baseUrl}products`)
         return responseData;
     } catch (error) {
-        throw ({'error': error});
+        throw error;
     }
 }
 
@@ -42,7 +42,7 @@ export const editProduct = async (productId, body) => {
         let responseData = await axios.patch(`${baseUrl}users/products/${productId}`, body);
         return responseData;
     } catch (error) {
-        throw ({'error': error});
+        throw error;
     }
 }
 
@@ -51,6 +51,6 @@ export const sendEmail = async (body) => {
         let responseData = await axios.post(`${baseUrl}send_email`, body);
         return responseData;
     } catch (error) {
-        throw ({'error': error});
+        throw error;
     }
 }

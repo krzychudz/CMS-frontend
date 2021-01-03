@@ -22,7 +22,6 @@ import NotFoundScreen from './screens/not_found/NotFoundScreen';
 function App() {
   
   useEffect(() => {
-    console.log("ello");
     const unsubscribe = onAuthStateChange();
     return () => {
       unsubscribe();

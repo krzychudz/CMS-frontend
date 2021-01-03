@@ -21,22 +21,23 @@ function HomeScreen(props) {
 
     const history = useHistory();
 
-    useEffect(async () => {
-        setInProgress(true);
-        try {
-            let response = await getAllProducts();
-            console.log(response.data);
-            setProductsData(response.data);
-            localStorage.setItem("testData", "true");
-        } catch (e) {
-            showGeneralAlertError(e.error);
-        } finally {
-            setInProgress(false);
+    useEffect(() => {
+        async function fetchData() {
+            setInProgress(true);
+            try {
+                let response = await getAllProducts();
+                setProductsData(response.data);
+                localStorage.setItem("testData", "true");
+            } catch (e) {
+                showGeneralAlertError(e.error);
+            } finally {
+                setInProgress(false);
+            }
         }
+        fetchData();
     }, []);
 
     const onProductClicked = data => {
-        //setProductToDisplay(data);
         history.push('/product_details', {
             product: data,
             previewMode: false
@@ -60,7 +61,7 @@ function HomeScreen(props) {
                             <GridListTile key={product.productId} className={classes.gridItem} onClick={() => onProductClicked(product)}>
                                 {product.imageUrl == null
                                     ? <Image className={classes.imageIcon} />
-                                    : <img src={product.imageUrl} />}
+                                    : <img src={product.imageUrl} alt={"Product"}/>}
                                 <GridListTileBar
                                     title={product.name}
                                     subtitle={convertPrice(product.price)}

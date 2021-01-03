@@ -28,7 +28,7 @@ function RegisterScreen() {
     const onRegisteredCliked = async data => {
         try {
             setProgressVisibility(true);
-            var registeredUser = await auth.createUserWithEmailAndPassword(data.email, data.password);
+            await auth.createUserWithEmailAndPassword(data.email, data.password);
             history.goBack();
             reset();
         } catch (error) {
@@ -55,7 +55,7 @@ function RegisterScreen() {
                                         helperText={fieldsErrors.email ? fieldsErrors.email.message : null}
                                         variant="standard"
                                         label="Email"
-                                        error={fieldsErrors.email != undefined}
+                                        error={fieldsErrors.email !== undefined}
                                         InputProps={{
                                             className: classes.input
                                         }}
@@ -84,7 +84,7 @@ function RegisterScreen() {
                                         helperText={fieldsErrors.password ? fieldsErrors.password.message : null}
                                         variant="standard"
                                         label="Hasło"
-                                        error={fieldsErrors.password != undefined}
+                                        error={fieldsErrors.password !== undefined}
                                         type="password"
                                         InputProps={{
                                             className: classes.input
@@ -114,7 +114,7 @@ function RegisterScreen() {
                                         helperText={fieldsErrors.passwordRe ? fieldsErrors.passwordRe.message : null}
                                         variant="standard"
                                         label="Powtórz hasło"
-                                        error={fieldsErrors.passwordRe != undefined}
+                                        error={fieldsErrors.passwordRe !== undefined}
                                         type="password"
                                         InputProps={{
                                             className: classes.input

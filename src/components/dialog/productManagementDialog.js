@@ -60,7 +60,7 @@ function ProductManagementDialog(props) {
     const classes = useStyles();
     const styles = generalStyles();
 
-    const { handleSubmit, control, errors: fieldsErrors, reset } = useForm();
+    const { handleSubmit, control, errors: fieldsErrors } = useForm();
     const [isPublished, setIsPublished] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
     const [isInProgress, setInProgress] = useState(false);
@@ -73,7 +73,7 @@ function ProductManagementDialog(props) {
                setImageUrl(productData.imageUrl);
            }
         }
-      }, [open, prevVisibility]);
+      }, [open, prevVisibility, productData]);
     
 
     const clearDialogData = () => {
@@ -108,7 +108,7 @@ function ProductManagementDialog(props) {
             }
             props.handleClose();
         } catch (e) {
-            showGeneralAlertError(e.error);
+            showGeneralAlertError(e.message);
         } finally {
             setInProgress(false);
         }
@@ -125,13 +125,13 @@ function ProductManagementDialog(props) {
             let imageUrl = await uploadImageToFirebaseStorage(image);
             setImageUrl(imageUrl);
         } catch (e) {
-            onImageFetchedError(e.error);
+            onImageFetchedError(e.message);
         }
     }
 
     const onImageFetchedError = (e) => {
         setImageUrl(null);
-        showGeneralAlertError(e.error);
+        showGeneralAlertError(e.message);
     }
 
     return (
@@ -279,7 +279,7 @@ function ImageUploader(props) {
                 {imageUrl === null
                     ? <Image className={classes.imageIcon} />
                     : imageUrl === "" ? <Box className={`${classes.imageIcon} ${styles.centerChildrenVertically}`}> <CircularProgress /> </Box>
-                        : <img className={classes.imageIcon} src={imageUrl} />}
+                        : <img className={classes.imageIcon} src={imageUrl} alt={"Product"} />}
             </Grid>
             <Grid item xs={12} sm={3} md={2} className={styles.centerChildrenVertically}>
                 <Button

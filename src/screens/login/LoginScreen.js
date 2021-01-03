@@ -16,7 +16,7 @@ import firebaseApp from '../../firebaseConfig';
 
 function LoginScreen() {
 
-    const { handleSubmit, control, errors: fieldsErrors, reset } = useForm();
+    const { handleSubmit, control, errors: fieldsErrors } = useForm();
     const [isInProgress, setProgressVisibility] = useState(false);
     const [loginError, setLoginError] = useState("");
     const history = useHistory(); 
@@ -26,10 +26,9 @@ function LoginScreen() {
     const auth = firebaseApp.auth();
 
     const onLoginClicked = async data => {
-        console.log(data);
         setProgressVisibility(true);
         try {
-            const result = await auth.signInWithEmailAndPassword(data.email, data.password);
+            await auth.signInWithEmailAndPassword(data.email, data.password);
             history.replace('/');
         } catch (error) {
             setLoginError(error.message);

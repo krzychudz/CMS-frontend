@@ -24,7 +24,7 @@ function ProducstManagement(props) {
     const [productToRemoveId, setProductToRemove] = useState();
     const [productToEdit, setProductToEdit] = useState(null);
     const [isProductManagementShown, setProductManagementShown] = useState(false);
-    const history = useHistory(); 
+    const history = useHistory();
 
     const onProductEditClicked = (element, data) => {
         element.stopPropagation();
@@ -49,8 +49,8 @@ function ProducstManagement(props) {
 
     const onProductEdited = data => {
         let currentData = productsData;
-        let indexToUpdate = currentData.findIndex((item) => item.productId == data.productId);        
-        if (indexToUpdate != -1) {
+        let indexToUpdate = currentData.findIndex((item) => item.productId === data.productId);
+        if (indexToUpdate !== -1) {
             let updatedProduct = currentData[indexToUpdate];
             updatedProduct.name = data.name;
             updatedProduct.description = data.description;
@@ -74,11 +74,11 @@ function ProducstManagement(props) {
             let response = await removeProduct(productToRemoveId);
             let removedProductId = response.data.removedId;
             let currentData = productsData;
-            let filteredData = currentData.filter((product) => product.productId != removedProductId);
+            let filteredData = currentData.filter((product) => product.productId !== removedProductId);
             setProductsData(filteredData);
             setSuccessSnackbarMessage("Produkt został usunięty!");
         } catch (e) {
-            showGeneralAlertError(e.error);
+            showGeneralAlertError(e.message);
         } finally {
             setDeleteDialogShown(false);
         }
@@ -93,41 +93,44 @@ function ProducstManagement(props) {
         setProductToEdit(null);
     };
 
-    useEffect(async () => {
-        setInProgress(true);
-        try {
-            let response = await getUsersProducts();
-            setProductsData(response.data);
-        } catch (e) {
-            showGeneralAlertError(e.error);
-        } finally {
-            setInProgress(false);
+    useEffect(() => {
+        async function fetchData() {
+            setInProgress(true);
+            try {
+                let response = await getUsersProducts();
+                setProductsData(response.data);
+            } catch (e) {
+                showGeneralAlertError(e.message);
+            } finally {
+                setInProgress(false);
+            }
         }
+        fetchData();
     }, []);
 
     return (
         <div className={classes.root}>
-            {productsData == null ? null :
+            {productsData === null ? null :
                 (productsData.length === 0)
                     ? <div className={classes.centerText}>Nie masz zadnych produktów.<br />Aby dodać nowe naciśnij + w prawym dolnym rogu ekranu.</div>
                     : <GridList cellHeight={180} className={classes.gridList} cols={getGridListCols(props)} spacing={12}>
 
-                        {productsData.filter((product) => product.isPublished).length != 0 &&
+                        {productsData.filter((product) => product.isPublished).length !== 0 &&
                             <GridListTile key="Subheader_published" cols={getGridListCols(props)} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }} >
                                 <ListSubheader component="div" className={classes.text}>Opublikowane</ListSubheader>
                             </GridListTile>
                         }
                         {productsData.filter((product) => product.isPublished).map((product) => (
-                            <GridListTile key={product.productId} className = {classes.gridItem} onClick = {(e) => onProductClicked(e, product)}>
+                            <GridListTile key={product.productId} className={classes.gridItem} onClick={(e) => onProductClicked(e, product)}>
                                 {product.imageUrl == null
                                     ? <Image className={classes.imageIcon} />
-                                    : <img src={product.imageUrl} />}
+                                    : <img src={product.imageUrl} alt={"Product"} />}
                                 <GridListTileBar
                                     title={product.name}
                                     subtitle={convertPrice(product.price)}
                                     actionIcon={[
                                         <IconButton className={classes.icon}>
-                                            <EditIcon onClick = {(e) => onProductEditClicked(e, product)} />
+                                            <EditIcon onClick={(e) => onProductEditClicked(e, product)} />
                                         </IconButton>,
                                         <IconButton className={classes.icon_delete} onClick={(e) => performDeleteProduct(e, product.productId)}>
                                             <DeleteIcon />
@@ -137,22 +140,22 @@ function ProducstManagement(props) {
                             </GridListTile>
                         ))}
 
-                        {productsData.filter((product) => !product.isPublished).length != 0 &&
+                        {productsData.filter((product) => !product.isPublished).length !== 0 &&
                             <GridListTile key="Subheader_unpublished" cols={getGridListCols(props)} style={{ height: 'auto', background: "rgba(0, 0, 0, 0.6)" }}  >
                                 <ListSubheader component="div" className={classes.text}>Nieopublikowane</ListSubheader>
                             </GridListTile>
                         }
                         {productsData.filter((product) => !product.isPublished).map((product) => (
-                            <GridListTile key={product.productId} className = {classes.gridItem} onClick = {(e) => onProductClicked(e, product)} >
+                            <GridListTile key={product.productId} className={classes.gridItem} onClick={(e) => onProductClicked(e, product)} >
                                 {product.imageUrl == null
                                     ? <Image className={classes.imageIcon} />
-                                    : <img src={product.imageUrl} />}
+                                    : <img src={product.imageUrl} alt={"Product"} />}
                                 <GridListTileBar
                                     title={product.name}
                                     subtitle={convertPrice(product.price)}
                                     actionIcon={[
                                         <IconButton className={classes.icon}>
-                                            <EditIcon onClick = {(e) => onProductEditClicked(e, product)} />
+                                            <EditIcon onClick={(e) => onProductEditClicked(e, product)} />
                                         </IconButton>,
                                         <IconButton className={classes.icon_delete} onClick={(e) => performDeleteProduct(e, product.productId)}>
                                             <DeleteIcon />
@@ -167,13 +170,13 @@ function ProducstManagement(props) {
 
             <Fab color="primary" className={classes.fab} onClick={handleClickOpen}>
                 <AddIcon />
-            </Fab> 
+            </Fab>
             {isInProgress &&
                 <div className={classes.centerText}>
                     <CircularProgress />
                 </div>
             }
-            <ProductManagementDialog open={isProductManagementShown} handleClose={handleClose} isInEditMode={productToEdit != null} onProductAdded={onProductAdded} onProductEdited={onProductEdited} productData = {productToEdit} />
+            <ProductManagementDialog open={isProductManagementShown} handleClose={handleClose} isInEditMode={productToEdit !== null} onProductAdded={onProductAdded} onProductEdited={onProductEdited} productData={productToEdit} />
             <ConfirmationDialog
                 open={isDeleteDialogShown}
                 title="Usuwanie produktu"
@@ -182,7 +185,7 @@ function ProducstManagement(props) {
                 positiveButton="Tak"
                 negativeButtonCallback={() => setDeleteDialogShown(false)}
                 positiveButtonCallback={deleteProduct} />
-            <SuccessSnackbar open={successSnackbarMessage != ""} onClose={() => setSuccessSnackbarMessage("")} alertText={successSnackbarMessage} />
+            <SuccessSnackbar open={successSnackbarMessage !== ""} onClose={() => setSuccessSnackbarMessage("")} alertText={successSnackbarMessage} />
         </div>
     );
 }

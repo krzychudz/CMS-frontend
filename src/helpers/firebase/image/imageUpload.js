@@ -9,7 +9,6 @@ export const uploadImageToFirebaseStorage = async (image) => {
         await storage.ref(`images/${fileName}`).put(image);
         return await storage.ref('images').child(`${fileName}`).getDownloadURL();
     } catch (e) {
-        console.log("postReturn33");
-        throw ({'error': e.error});
+        throw e;
     }
 }
