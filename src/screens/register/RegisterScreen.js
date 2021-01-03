@@ -29,6 +29,7 @@ function RegisterScreen() {
         try {
             setProgressVisibility(true);
             await auth.createUserWithEmailAndPassword(data.email, data.password);
+            auth.signOut();
             history.goBack();
             reset();
         } catch (error) {
