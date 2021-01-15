@@ -88,7 +88,7 @@ function ProductDetailsScreen() {
                 {productData.description}
             </Grid>
             <Grid item xs={12}> <Divider className={productDetailsScreenStyles.divider} variant="middle" /> </Grid>
-            {!previewMode &&
+            { (!previewMode && isUserLoggedIn != null) &&
                 <Grid item xs={12} className={styles.centerChildren}>Kontakt ze sprzedawcą</Grid>
             }
             { (!previewMode && isUserLoggedIn != null) &&
