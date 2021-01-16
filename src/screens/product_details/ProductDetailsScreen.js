@@ -11,6 +11,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { sendEmail } from '../../backend/productsRepository';
 import { showGeneralAlertError, SuccessSnackbar } from '../../components/alert/alerts';
 
+import MUIRichTextEditor from 'mui-rte'
+
 const screenStyles = makeStyles(theme => ({
     productImage: {
         margin: '16px'
@@ -85,7 +87,13 @@ function ProductDetailsScreen() {
             </Grid>
             <Grid item xs={12}> <Divider className={productDetailsScreenStyles.divider} variant="middle" /> </Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${productDetailsScreenStyles.productDescription}`}>
-                {productData.description}
+                                <MUIRichTextEditor
+                                        defaultValue={productData.description}
+                                        readOnly={true}
+                                        inheritFontSize={true}
+                                        controls={[]}
+                                    />
+                {/* {productData.description} */}
             </Grid>
             <Grid item xs={12}> <Divider className={productDetailsScreenStyles.divider} variant="middle" /> </Grid>
             { (!previewMode && isUserLoggedIn != null) &&

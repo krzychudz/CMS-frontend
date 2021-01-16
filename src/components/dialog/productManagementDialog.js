@@ -10,6 +10,10 @@ import { showGeneralAlertError } from '../alert/alerts';
 import { addProduct, editProduct } from '../../backend/productsRepository';
 import { uploadImageToFirebaseStorage } from '../../helpers/firebase/image/imageUpload';
 
+import MUIRichTextEditor from 'mui-rte'
+
+import { convertToRaw } from 'draft-js'
+
 const useStyles = makeStyles((theme) => ({
     appBar: {
         position: 'relative',
@@ -41,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -48,7 +53,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 function usePrevious(value) {
     const ref = useRef();
     useEffect(() => {
-      ref.current = value;
+        ref.current = value;
     });
     return ref.current;
 }
@@ -64,17 +69,18 @@ function ProductManagementDialog(props) {
     const [isPublished, setIsPublished] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
     const [isInProgress, setInProgress] = useState(false);
+    const [descriptionText, setDescriptionText] = useState(false);
     const prevVisibility = usePrevious(open);
 
     useEffect(() => {
         if (open && !prevVisibility) {
-           if (productData != null) {
-               setIsPublished(productData.isPublished);
-               setImageUrl(productData.imageUrl);
-           }
+            if (productData != null) {
+                setIsPublished(productData.isPublished);
+                setImageUrl(productData.imageUrl);
+            }
         }
-      }, [open, prevVisibility, productData]);
-    
+    }, [open, prevVisibility, productData]);
+
 
     const clearDialogData = () => {
         setImageUrl(null);
@@ -92,7 +98,7 @@ function ProductManagementDialog(props) {
 
             let body = {
                 name: data.name,
-                description: data.description,
+                description: descriptionText,
                 price: data.price,
                 isPublished: isPublished,
                 imageUrl: imageUrl
@@ -132,6 +138,12 @@ function ProductManagementDialog(props) {
     const onImageFetchedError = (e) => {
         setImageUrl(null);
         showGeneralAlertError(e.message);
+    }
+
+    const keepEditorContent = (editorState) => {
+        const content = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
+        setDescriptionText(content);
+        console.log(content);
     }
 
     return (
@@ -177,7 +189,7 @@ function ProductManagementDialog(props) {
                                                 }} />
                                         }
                                         control={control}
-                                        defaultValue= {productData == null ? "" : productData.name}
+                                        defaultValue={productData == null ? "" : productData.name}
                                         rules={{
                                             required: 'Pole wymagane',
                                         }}
@@ -202,7 +214,7 @@ function ProductManagementDialog(props) {
                                             />
                                         }
                                         control={control}
-                                        defaultValue= {productData == null ? "" : productData.price}
+                                        defaultValue={productData == null ? "" : productData.price}
                                         rules={{
                                             required: 'Pole wymagane',
                                             pattern: {
@@ -216,26 +228,12 @@ function ProductManagementDialog(props) {
 
                             <Grid item xs={12}>
                                 <FormControl className={classes.margin} variant="standard">
-                                    <Controller
-                                        name="description"
-                                        as={
-                                            <TextField
-                                                id="description"
-                                                helperText={fieldsErrors.description ? fieldsErrors.description.message : null}
-                                                variant="standard"
-                                                label="Opis"
-                                                error={fieldsErrors.description !== undefined}
-                                                multiline
-                                                InputProps={{
-                                                    className: styles.input
-                                                }}
-                                            />
-                                        }
-                                        control={control}
-                                        defaultValue= {productData == null ? "" : productData.description}
-                                        rules={{
-                                            required: 'Pole wymagane',
-                                        }}
+                                    <MUIRichTextEditor
+                                        label="Opis..."
+                                        defaultValue={productData == null ? "" : productData.description}
+                                        inlineToolbar={true}
+                                        onChange={keepEditorContent}
+                                        controls={["title", "bold", "italic", "underline", "strikethrough", "highlight", "undo", "redo", "link", "numberList", "bulletList", "quote", "clear"]}
                                     />
                                 </FormControl>
                             </Grid>
@@ -263,7 +261,7 @@ function ProductManagementDialog(props) {
                     </Grid>
                 </Grid>
             </DialogContent>
-        
+
         </Dialog>
     );
 }
@@ -287,7 +285,7 @@ function ImageUploader(props) {
                     component="label"
                     color="primary">
                     Dodaj zdjęcie
-                        <input type="file" hidden onChange={props.handleFileUpload}/>
+                        <input type="file" hidden onChange={props.handleFileUpload} />
                 </Button>
             </Grid>
         </Grid>
