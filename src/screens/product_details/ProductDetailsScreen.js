@@ -32,6 +32,7 @@ function ProductDetailsScreen() {
     const previewMode = history.location.state.previewMode;
 
     const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+    const currentUserEmail = localStorage.getItem('currentUserEmail');
 
     const scrollToForm = () => formRef.current.scrollIntoView()
 
@@ -62,7 +63,7 @@ function ProductDetailsScreen() {
             <Grid item xs={12} className={`${styles.centerChildren} ${screenStyles.productInfo}`}><b>Nazwa:</b> {productData.name}</Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${screenStyles.productInfo}`}><b>Cena:</b> {convertPrice(productData.price)}</Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${screenStyles.productInfo}`}>
-                <b>Sprzedawca: </b>{productData.ownerEmail} {(isUserLoggedIn && !previewMode) && <IconButton className={screenStyles.icon} onClick={scrollToForm}> <ContactMail /> </IconButton>}
+                <b>Sprzedawca: </b>{productData.ownerEmail} {(currentUserEmail != null && currentUserEmail !== productData.ownerEmail && !previewMode) && <IconButton className={screenStyles.icon} onClick={scrollToForm}> <ContactMail /> </IconButton>}
             </Grid>
             <Grid item xs={12}> <Divider className={screenStyles.divider} variant="middle" /> </Grid>
             <Grid item xs={12} className={`${styles.centerChildren} ${screenStyles.productDescription}`}>
@@ -79,10 +80,10 @@ function ProductDetailsScreen() {
                 }
             </Grid>
             <Grid item xs={12}> <Divider className={screenStyles.divider} variant="middle" /> </Grid>
-            { (!previewMode && isUserLoggedIn != null) &&
+            { (!previewMode && currentUserEmail != null && currentUserEmail !== productData.ownerEmail) &&
                 <Grid item xs={12} className={styles.centerChildren}>Kontakt ze sprzedawcą</Grid>
             }
-            { (!previewMode && isUserLoggedIn != null) &&
+            { (!previewMode && currentUserEmail != null && currentUserEmail !== productData.ownerEmail) &&
                 <Grid item xs={12} className={styles.centerChildren} ref={formRef}>
 
                     <form onSubmit={handleSubmit(sendMessage)}>
