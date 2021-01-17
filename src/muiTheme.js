@@ -19,7 +19,23 @@ const mainTheme = createMuiTheme({
       },
 
       focused: {}
-    }
+    },
+    MUIRichTextEditor: {
+      root: {
+          marginTop: 20,
+          marginBottom: 20,
+          width: "100%",
+          color: "#FFFFFF"
+      },
+      editor: {
+          borderBottom: "1px solid grey" ,
+          color: "black",
+          padding: 16
+      },
+      container: {
+        backgroundColor: "#FFFFFF"
+      }
+  }
   },
   breakpoints: {
     values: {
