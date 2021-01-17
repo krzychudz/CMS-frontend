@@ -31,7 +31,6 @@ function ProductDetailsScreen() {
     const productData = history.location.state.product;
     const previewMode = history.location.state.previewMode;
 
-    const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
     const currentUserEmail = localStorage.getItem('currentUserEmail');
 
     const scrollToForm = () => formRef.current.scrollIntoView()
